@@ -82,4 +82,21 @@ queries = [
         "sql": "TODO",
         "fields": ["TODO"],
     },
+    {
+        "sql": "CALL employees.DeleteTemporal(‘salaries’, ‘1986-06-26’,’1987-06-27);",
+        "fields": [],
+    },
+    {
+        "sql": """
+        UPDATE salaries FOR PORTION OF valid_period
+        FROM ‘1986-06-26'
+        TO '1987-06-26'
+        SET salary = 100000
+        """,
+        "fields": [],
+    },
+    {
+        "sql": "CALL employees.projection('salaries','emp_no');",
+        "fields": []
+    },
 ]

@@ -11,6 +11,9 @@ def print_menu():
     x.add_row(["5", "Temukan jumlah employee pada setiap departemen yang sedang bekerja pada departemen tersebut namun pernah bekerja dengan manajer sebelumnya", "overlaps"])
     x.add_row(["6", "TODO", ""])
     x.add_row(["7", "TODO", ""])
+    x.add_row(["8", "Temporal Delete", ""])
+    x.add_row(["9", "Temporal Update", ""])
+    x.add_row(["10", "Temporal Projection", ""])
     x.align = "l"
     print(x)
     print("Press CTRL + C to exit")
