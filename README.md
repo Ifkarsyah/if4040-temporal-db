@@ -10,3 +10,9 @@ pip3 install mariadb
 
 pip3 install prettytable
 ```
+
+
+## How to Run
+```python 
+python main.py
+```
