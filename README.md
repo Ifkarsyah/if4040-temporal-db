@@ -16,3 +16,10 @@ pip3 install prettytable
 ```python 
 python main.py
 ```
+
+## Anggota
+* Ferdian Ifkarsyah 13517024
+* Hafidh Redyanto 13517061
+* Didik Supriadi 13517069
+* Muhammad Nurdin Husen 13517112
+* Louis Cahyadi	13517126
