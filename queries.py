@@ -75,12 +75,38 @@ queries = [
         "fields": ["dept_no", "dept_name", "count_employee"],
     },
     {
-        "sql": "TODO",
-        "fields": ["TODO"],
+        "sql": """
+        SELECT e.emp_no, e.first_name, e.last_name, t.title
+
+        FROM departments dn
+        JOIN dept_manager dm ON dn.dept_no = dm.dept_no
+        JOIN dept_emp de ON dn.dept_no = de.dept_no
+        JOIN employees e ON de.emp_no = e.emp_no
+        JOIN titles t ON t.emp_no = e.emp_no
+
+        WHERE de.from_date = dm.from_date
+        AND dm.to_date >= NOW()
+        AND de.to_date >= NOW()
+        AND t.to_date >= NOW()
+        AND dn.dept_name = "Finance"
+        """,
+        "fields": ["emp_no", "first_name", "last_name", "title"],
     },
     {
-        "sql": "TODO",
-        "fields": ["TODO"],
+        "sql": """
+        SELECT e2.emp_no, e2.first_name, e2.last_name, e2.gender
+
+        FROM dept_emp de1
+        JOIN employees e1 ON e1.emp_no = de1.emp_no
+        JOIN dept_emp de2
+        JOIN employees e2 ON e2.emp_no = de2.emp_no
+
+        WHERE e1.first_name = 'Georgi' AND e1.last_name = 'Facello'
+        AND de1.from_date = de2.from_date
+        AND de1.to_date = de2.to_date
+        AND !(e2.first_name = 'Georgi' AND e2.last_name = 'Facello')
+        """,
+        "fields": ["emp_no", "first_name", "last_name", "gender"],
     },
     {
         "sql": "CALL employees.DeleteTemporal(‘salaries’, ‘1986-06-26’,’1987-06-27);",
@@ -99,4 +125,36 @@ queries = [
         "sql": "CALL employees.projection('salaries','emp_no');",
         "fields": []
     },
+    {
+        "sql": """
+        SELECT emp_no, dept_no, min(from_date) as from_date, max(to_date) as to_date
+        FROM
+        (SELECT * FROM dept_manager
+        UNION
+        SELECT * FROM dept_emp) AS u
+        GROUP BY emp_no, dept_no LIMIT 20;
+        """,
+        "fields": ["emp_no", "dept_no", "from_date", "to_date"],
+    },
+    {
+        "sql": """
+        SELECT emp_no, dept_no, min(from_date) as from_date, max(to_date) as to_date
+        FROM
+        (SELECT * FROM dept_emp
+        EXCEPT
+        SELECT * FROM dept_manager) AS u
+        GROUP BY emp_no, dept_no LIMIT 20;
+        """,
+        "fields": ["emp_no", "dept_no", "from_date", "to_date"],
+    },
+    {
+        "sql": """
+        SELECT dept_manager.emp_no, dept_manager.dept_no, salaries.salary,
+            IF(dept_manager.from_date >= salaries.from_date, dept_manager.from_date, salaries.from_date) AS from_date,
+            IF(dept_manager.to_date <= salaries.to_date, dept_manager.to_date, salaries.to_date) AS to_date
+        FROM dept_manager INNER JOIN salaries
+        ON dept_manager.emp_no = salaries.emp_no LIMIT 20;
+        """,
+        "fields": ["emp_no", "dept_no", "salary", "from_date", "to_date"],
+    }
 ]
