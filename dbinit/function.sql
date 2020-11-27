@@ -59,3 +59,36 @@ BEGIN
 	DEALLOCATE PREPARE stmt;
 END$$
 DELIMITER ;
+
+
+-- TEMPORAL UNION
+
+-- SELECT <primary_key>, MIN(from_date) as from_date, MAX(to_date) as to_date
+-- FROM
+-- (SELECT * from <table_name>
+-- UNION
+-- SELECT * FROM <table_name>) AS u
+-- GROUP BY <primary_key>
+
+
+-- TEMPORAL DIFFERENCE
+
+-- SELECT <primary_key>, MIN(from_date) as from_date, MAX(to_date) as to_date
+-- FROM
+-- (SELECT * from <table_name>
+-- EXCEPT
+-- SELECT * FROM <table_name>) AS d
+-- GROUP BY <primary_key>
+
+
+-- TEMPORAL JOIN
+
+-- SELECT <column-name>
+--   IF(<t1.from_date> >= <t2.from_date>,
+--     <t1.from_date>, <t2.from_date>)
+--       AS from_date,
+--   IF(<t1.to_date> <= <t2.to_date>,
+--     <t1.to_date>, <t2.to_date>)
+--       AS to_date
+-- FROM <t1> INNER JOIN <t2>
+-- ON <t1.column_name> = <t2.column_name>
