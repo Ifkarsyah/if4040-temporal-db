@@ -43,3 +43,19 @@ DELIMITER ;
 -- FROM ‘1986-06-26'
 -- TO '1987-06-26'
 -- SET salary = 100000
+
+
+DROP PROCEDURE IF EXISTS employees.projection;
+
+DELIMITER $$
+$$
+CREATE PROCEDURE `employees`.`projection`(
+IN table_name VARCHAR(15), 
+IN column_name VARCHAR(15))
+BEGIN
+	SET @sql = CONCAT('SELECT ',column_name, ', from_date, to_date FROM ', table_name);
+	PREPARE stmt FROM @sql;
+	EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
+END$$
+DELIMITER ;
